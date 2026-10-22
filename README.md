@@ -1,6 +1,10 @@
 Link to doc
 https://docs.google.com/document/d/1YW5-PVPtVKUUdkoNldTMV0hb51F0lO5PIpa5tK-puYw/edit?tab=t.0
 
+Names and Git username:
+AJ - Popblue13
+
+
 Epics:
 
 Epic 1.1 (Sleep Log): As a night owl, I want to record my sleep duration, quality, and dream details, so that I can keep an accurate record of my sleep health over time.

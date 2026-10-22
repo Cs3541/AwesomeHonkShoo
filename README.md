@@ -5,6 +5,7 @@ Names and Git username:
 AJ - Popblue13
 Kevin Beyer - 3D-Shareware
 Annie Klyn - AnnieKlyn
+Sofia Sinogas - sofia-sinogas
 
 Epics:
 

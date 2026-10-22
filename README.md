@@ -3,7 +3,7 @@ https://docs.google.com/document/d/1YW5-PVPtVKUUdkoNldTMV0hb51F0lO5PIpa5tK-puYw/
 
 Names and Git username:
 AJ - Popblue13
-
+Kevin Beyer - 3D-Shareware
 
 Epics:
 

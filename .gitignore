@@ -82,3 +82,6 @@ pubspec.lock
 .dart_tool/version
 analysis_options.yaml
 >>>>>>> Stashed changes
+.dart_tool/package_config.json
+.dart_tool/package_graph.json
+.dart_tool/version

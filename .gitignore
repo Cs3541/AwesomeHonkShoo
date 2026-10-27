@@ -46,3 +46,39 @@ app.*.map.json
 
 # Widget Preview related
 .widget_preview/
+<<<<<<< Updated upstream
+=======
+
+# us related (oops)
+/.dart_tool/package_config.json
+/.dart_tool/version
+/build/reports/problems/problems-report.html
+analysis_options.yaml
+pubspec.lock
+.dart_tool/package_config.json
+.dart_tool/package_graph.json
+.dart_tool/version
+web/favicon.png
+web/index.html
+web/manifest.json
+web/icons/Icon-192.png
+web/icons/Icon-512.png
+web/icons/Icon-maskable-192.png
+web/icons/Icon-maskable-512.png
+.metadata
+analysis_options.yaml
+pubspec.lock
+.dart_tool/package_config.json
+.dart_tool/package_graph.json
+.dart_tool/version
+analysis_options.yaml
+pubspec.lock
+.dart_tool/package_config.json
+.dart_tool/package_graph.json
+.dart_tool/version
+.dart_tool/version
+.dart_tool/package_graph.json
+.dart_tool/package_config.json
+.dart_tool/version
+analysis_options.yaml
+>>>>>>> Stashed changes

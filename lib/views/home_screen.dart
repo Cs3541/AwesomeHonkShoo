@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -22,6 +23,12 @@ class HomeScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {},
               child: const Text('Get Started'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+              },
+              child: const Text('Log Out'),
             ),
           ],
         ),

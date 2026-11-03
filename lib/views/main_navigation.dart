@@ -1,3 +1,4 @@
+import 'package:awesome_honk_shoo_app/views/day_overview.dart';
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
@@ -17,7 +18,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   final List<Widget> _screens = [
     const HomeScreen(),
     const CalendarScreen(),
-    const CalendarScreen(),
+    const DayOverviewScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -44,8 +45,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ),
 
           BottomNavigationBarItem(
-            icon: Icon(Icons.nightlight),
-            label: 'Test Sleep Day Review',
+            icon: Icon(Icons.nightlight_round_outlined),
+            label: '(test tab) Day Overview',
           ),
         ],
       ),

@@ -12,6 +12,7 @@
         "firebase_auth",
         "firebase_core",
         "firebase_database",
+        "fl_chart",
         "flutter"
       ],
       "devDependencies": [
@@ -93,6 +94,15 @@
         "firebase_core_platform_interface",
         "flutter",
         "meta"
+      ]
+    },
+    {
+      "name": "fl_chart",
+      "version": "0.70.2",
+      "dependencies": [
+        "equatable",
+        "flutter",
+        "vector_math"
       ]
     },
     {
@@ -289,6 +299,14 @@
         "http",
         "meta",
         "plugin_platform_interface"
+      ]
+    },
+    {
+      "name": "equatable",
+      "version": "2.1.0",
+      "dependencies": [
+        "collection",
+        "meta"
       ]
     },
     {

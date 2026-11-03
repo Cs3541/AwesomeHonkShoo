@@ -1,9 +1,9 @@
 import '../models/sleep_log_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SleepLogPresenter {
-  final DatabaseReference _db = FirebaseDatabase.instance.ref();
+  final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<void> saveSleepLog(SleepLog log) async {
@@ -13,9 +13,11 @@ class SleepLogPresenter {
       throw Exception('User not authenticated');
     }
 
-    final newLogRef = _db.child('sleepLogs/$userId').push();
-
-    await newLogRef.set(log.toMap());
+    await _db
+        .collection('users')
+        .doc(userId)
+        .collection('sleepLogs')
+        .add(log.toMap());
   }
 
   Future<List<SleepLog>> getSleepLogs() async {

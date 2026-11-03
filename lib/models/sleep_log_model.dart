@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 
 class SleepLog {
   final String id;
@@ -16,7 +17,7 @@ class SleepLog {
     required this.notes,
   });
 
-  static final DatabaseReference _db = FirebaseDatabase.instance.ref();
+  static final FirebaseFirestore _db = FirebaseFirestore.instance;
   static final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static Future<List<SleepLog>> getSleepLogs() async {
@@ -26,26 +27,12 @@ class SleepLog {
       throw Exception('User not authenticated');
     }
 
-    final snapshot = await _db.child('sleepLogs/$userId').get();
+    final snapshot = await _db.collection('sleepLogs').doc(userId).collection('sleepLogs').get();
 
-    final List<SleepLog> sleepLogs = [];
-
-    if (snapshot.exists) {
-      final data = Map<String, dynamic>.from(
-        snapshot.value as Map,
-      );
-
-      data.forEach((key, value) {
-        sleepLogs.add(
-          SleepLog.fromMap(
-            key,
-            Map<String, dynamic>.from(value),
-          ),
+    return snapshot.docs.map((doc) {
+        return SleepLog.fromMap(doc.id,doc.data(),
         );
-      });
-    }
-
-    return sleepLogs;
+      }).toList();
   }
 
   Map<String, dynamic> toMap() {

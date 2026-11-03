@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/browser.dart';
+import 'package:timezone/data/latest.dart';
 import 'views/main_navigation.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'views/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'firebase_options.dart';
+
+final FlutterLocalNotificationsPlugin notificationsPlugin = FlutterLocalNotificationsPlugin();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +16,21 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await initNotifications();
   runApp(const AwesomeHonkShooApp());
+}
+
+Future<void> initNotifications() async {
+  initializeTimeZones();
+  setLocalLocation(
+    getLocation('America/Toronto'),
+  );
+
+  const InitializationSettings initializationSettings =
+    InitializationSettings(
+      android: AndroidInitializationSettings('mipmap/launcher_icon')
+    );
+  await notificationsPlugin.initialize(initializationSettings);
 }
 
 class AwesomeHonkShooApp extends StatelessWidget {

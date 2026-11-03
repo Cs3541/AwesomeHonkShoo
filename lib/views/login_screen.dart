@@ -24,6 +24,8 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordController.text.trim(),
     );
 
+    if (!mounted) return;
+
     if (error != null) {
       setState(() =>
         _errorMessage = error
@@ -93,8 +95,36 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             TextButton(
-              onPressed: () {
+              onPressed: () async{
             // reset password
+              final email = _emailController.text.trim();
+
+              if (email.isEmpty) {
+                setState(() {
+                  _errorMessage = 'Please enter your email first.';
+                });
+                return;
+              }
+
+              final error = await _presenter.resetPassword(email);
+
+              if (!mounted) return;
+
+              if (error != null) {
+                setState(() {
+                  _errorMessage = error;
+                });
+              } else {
+                setState(() {
+                  _errorMessage = null;
+                });
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Password reset email sent.'),
+                  ),
+                );
+              }
             },
               child: const Text('Forgot Password?'),
             ),

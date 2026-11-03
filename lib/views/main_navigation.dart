@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'home_screen.dart';
 import 'calendar_screen.dart';
 
@@ -6,15 +7,16 @@ class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
   @override
-  State<MainNavigationScreen> createState() =>
-      _MainNavigationScreenState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
 
+  // widgets for the bottom tab. index matches the items in the below scaffold
   final List<Widget> _screens = [
     const HomeScreen(),
+    const CalendarScreen(),
     const CalendarScreen(),
   ];
 
@@ -34,14 +36,16 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         onTap: _onItemTapped,
 
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
 
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month),
             label: 'Calendar',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Icon(Icons.nightlight),
+            label: 'Test Sleep Day Review',
           ),
         ],
       ),

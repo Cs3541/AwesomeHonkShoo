@@ -32,6 +32,24 @@
       "languageVersion": "3.4"
     },
     {
+      "name": "cloud_firestore",
+      "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/cloud_firestore-7.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "cloud_firestore_platform_interface",
+      "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/cloud_firestore_platform_interface-8.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "cloud_firestore_web",
+      "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/cloud_firestore_web-5.8.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
       "name": "collection",
       "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/collection-1.19.1",
       "packageUri": "lib/",
@@ -82,6 +100,24 @@
     {
       "name": "firebase_core_web",
       "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/firebase_core_web-4.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "firebase_database",
+      "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/firebase_database-13.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "firebase_database_platform_interface",
+      "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/firebase_database_platform_interface-0.4.2+9",
+      "packageUri": "lib/",
+      "languageVersion": "3.6"
+    },
+    {
+      "name": "firebase_database_web",
+      "rootUri": "file:///Users/sinogas/.pub-cache/hosted/pub.dev/firebase_database_web-0.2.9+16",
       "packageUri": "lib/",
       "languageVersion": "3.6"
     },

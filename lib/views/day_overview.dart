@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
@@ -6,7 +8,14 @@ class DayOverviewScreen extends StatelessWidget {
   // properties for the chart so we can modify it easier
   final double chartRadius = 150;
 
-  const DayOverviewScreen({super.key});
+  // should be fetched from database
+  double screenTime = 5.4;
+  // should be fetched from database
+  double sleepTime = 8.3;
+  // starts at 24 hours, reduced by screenTime and sleepTime in the actual chart build.
+  final double otherTime = 24;
+
+  DayOverviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +29,7 @@ class DayOverviewScreen extends StatelessWidget {
             sections: [
               PieChartSectionData(
                 // Screen time
-                value: 10,
+                value: screenTime,
                 title: '',
                 badgeWidget: Icon(
                   color: Colors.white,
@@ -37,7 +46,7 @@ class DayOverviewScreen extends StatelessWidget {
               ),
               PieChartSectionData(
                 // Sleep
-                value: 30,
+                value: sleepTime,
                 title: '',
                 badgeWidget: Icon(
                   color: Colors.white,
@@ -54,7 +63,8 @@ class DayOverviewScreen extends StatelessWidget {
               ),
               PieChartSectionData(
                 // "Other"
-                value: 20,
+                // prevents negative values, which are probably bad
+                value: max(0, otherTime - sleepTime - screenTime),
                 title: '',
                 badgeWidget: Icon(color: Colors.white, Icons.sunny, size: 48),
                 color: Colors.orange,

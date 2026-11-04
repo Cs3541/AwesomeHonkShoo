@@ -21,62 +21,73 @@ class DayOverviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Day Overview')),
-      body: Center(
-        child: PieChart(
-          PieChartData(
-            sectionsSpace: 4,
-            centerSpaceRadius: 0,
-            sections: [
-              PieChartSectionData(
-                // Screen time
-                value: screenTime,
-                title: '',
-                badgeWidget: Icon(
-                  color: Colors.white,
-                  Icons.phone_android,
-                  size: 48,
-                ),
-                color: Colors.blue,
-                radius: chartRadius,
-                titleStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            Expanded(
+              child: PieChart(
+                PieChartData(
+                  sectionsSpace: 4,
+                  centerSpaceRadius: 0,
+                  sections: [
+                    PieChartSectionData(
+                      // Screen time
+                      value: screenTime,
+                      title: '',
+                      badgeWidget: Icon(
+                        color: Colors.white,
+                        Icons.phone_android,
+                        size: 48,
+                      ),
+                      color: Colors.blue,
+                      radius: chartRadius,
+                      titleStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    PieChartSectionData(
+                      // Sleep
+                      value: sleepTime,
+                      title: '',
+                      badgeWidget: Icon(
+                        color: Colors.white,
+                        Icons.nightlight_round_outlined,
+                        size: 48,
+                      ),
+                      color: Colors.purple,
+                      radius: chartRadius,
+                      titleStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    PieChartSectionData(
+                      // "Other"
+                      // prevents negative values, which are probably bad
+                      value: max(0, otherTime - sleepTime - screenTime),
+                      title: '',
+                      badgeWidget: Icon(
+                        color: Colors.white,
+                        Icons.sunny,
+                        size: 48,
+                      ),
+                      color: Colors.orange,
+                      radius: chartRadius,
+                      titleStyle: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              PieChartSectionData(
-                // Sleep
-                value: sleepTime,
-                title: '',
-                badgeWidget: Icon(
-                  color: Colors.white,
-                  Icons.nightlight_round_outlined,
-                  size: 48,
-                ),
-                color: Colors.purple,
-                radius: chartRadius,
-                titleStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-              PieChartSectionData(
-                // "Other"
-                // prevents negative values, which are probably bad
-                value: max(0, otherTime - sleepTime - screenTime),
-                title: '',
-                badgeWidget: Icon(color: Colors.white, Icons.sunny, size: 48),
-                color: Colors.orange,
-                radius: chartRadius,
-                titleStyle: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -19,12 +19,34 @@ class DayOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // used for percentage-based screen sizing
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
       appBar: AppBar(title: const Text('Day Overview')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: 0,
+                horizontal: screenWidth * 0.15,
+              ),
+              child: SizedBox(
+                height: 200,
+                child: TextField(
+                  maxLines: null,
+                  expands: true,
+                  keyboardType: TextInputType.multiline,
+                  decoration: InputDecoration(
+                    hintText: "Notes...",
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
+            ),
             Expanded(
               child: PieChart(
                 PieChartData(

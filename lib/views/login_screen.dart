@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../presenters/auth_presenter.dart';
-import 'main_navigation.dart';
 import 'signup_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -24,16 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
       _passwordController.text.trim(),
     );
 
+    if (!mounted) return;
+
     if (error != null) {
       setState(() =>
         _errorMessage = error
-      );
-    } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (_) => const MainNavigationScreen(),
-        ),
       );
     }
   }

@@ -51,3 +51,6 @@ app.*.map.json
 /.dart_tool/package_config.json
 /.dart_tool/version
 /build/reports/problems/problems-report.html
+*.swift
+build/reports/problems/problems-report.html
+.dart_tool/package_config.json

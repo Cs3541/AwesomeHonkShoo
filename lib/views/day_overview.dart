@@ -64,11 +64,6 @@ class DayOverviewScreen extends StatelessWidget {
                       ),
                       color: Colors.blue,
                       radius: chartRadius,
-                      titleStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
                     ),
                     PieChartSectionData(
                       // Sleep
@@ -81,11 +76,6 @@ class DayOverviewScreen extends StatelessWidget {
                       ),
                       color: Colors.purple,
                       radius: chartRadius,
-                      titleStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
                     ),
                     PieChartSectionData(
                       // "Other"
@@ -99,11 +89,6 @@ class DayOverviewScreen extends StatelessWidget {
                       ),
                       color: Colors.orange,
                       radius: chartRadius,
-                      titleStyle: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
                     ),
                   ],
                 ),

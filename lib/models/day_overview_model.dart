@@ -1,3 +1,5 @@
+import "dart:nativewrappers/_internal/vm/lib/math_patch.dart";
+
 import "package:firebase_auth/firebase_auth.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 
@@ -6,14 +8,17 @@ class DayOfSleep {
   static final _firestore = FirebaseFirestore.instance;
   static final _auth = FirebaseAuth.instance;
 
+  // used to calculate screen time (sorry)
+  static const int secondsInADay = 86400;
+
   // Hopefully unique.
   final String id;
   // Time you went to bed.
   final DateTime start;
   // Time you woke up.
   final DateTime end;
-  // Hours you were on your dang phone.
-  final double screenTime;
+  // Seconds you were on your phone.
+  final int screenTime;
   // The day that the sleep is "recorded" for.
   // For instance, if you went to bed at 10:00 pm on Saturday, this will show up when you open up Saturday.
   // If you go to bed at 2:30 am on Sunday, it will still count as Saturday's sleep. This is why this variable exists.
@@ -53,5 +58,26 @@ class DayOfSleep {
         notes: data["notes"],
       );
     }).first;
+  }
+
+  Duration getDurationOfSleep() {
+    return end.difference(start);
+  }
+
+  // used to compare to other values of a pie chart easily, since floats of time elapsed don't exist I guess
+  int getSecondsOfSleep() {
+    return getDurationOfSleep().inSeconds;
+  }
+
+  int getSecondsOfScreenTime() {
+    return screenTime;
+  }
+
+  int getSecondsOfWakeTime() {
+    // min of 0 seconds obviously
+    return max(
+      0,
+      secondsInADay - getSecondsOfScreenTime() - getSecondsOfSleep(),
+    );
   }
 }

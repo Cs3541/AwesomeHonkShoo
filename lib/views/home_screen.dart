@@ -11,6 +11,23 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Container(
+        width: double.infinity,
+        color: Colors.blueAccent,
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        child: const Row(
+          children: [
+            Icon(Icons.campaign, color: Colors.white),
+            SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                'Special offer available now!',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      ),
             const Text(
               'Welcome to the Awesome Honk Shoo App!',
               textAlign: TextAlign.center,

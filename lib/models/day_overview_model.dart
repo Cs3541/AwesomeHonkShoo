@@ -1,7 +1,7 @@
-import "dart:nativewrappers/_internal/vm/lib/math_patch.dart";
-
 import "package:firebase_auth/firebase_auth.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
+
+import "dart:math";
 
 // A class that saves everything that would be loaded on a day_overview.
 class DayOfSleep {
@@ -34,31 +34,6 @@ class DayOfSleep {
     this.screenTime = 0,
     this.notes = '',
   });
-
-  // returns day of sleep for a given selected day.
-  // If multiple days have the same "day" assigned, they will misbehave. This is a bug. Eek.
-  // It also shouldn't work yet.
-  static Future<DayOfSleep> fetchSleepDay() async {
-    // userId will never be null don't worry about it
-    final userId = _auth.currentUser?.uid;
-
-    final snapshot = await _firestore
-        .collection("newSleepLog")
-        .where("userId", isEqualTo: userId)
-        .get();
-
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
-      return DayOfSleep(
-        id: data["id"],
-        start: data["start"],
-        end: data["end"],
-        tiedDate: data["tiedDate"],
-        screenTime: data["screenTime"],
-        notes: data["notes"],
-      );
-    }).first;
-  }
 
   Duration getDurationOfSleep() {
     return end.difference(start);

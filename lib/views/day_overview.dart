@@ -1,15 +1,20 @@
-import 'dart:ffi';
-import 'dart:math';
-
+import 'package:awesome_honk_shoo_app/models/day_overview_model.dart';
 import 'package:awesome_honk_shoo_app/presenters/day_overview_presenter.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
 
-class DayOverviewScreen extends StatelessWidget {
-  bool _isLoading = true;
-  DayOverviewPresenter _dayOverviewPresenter = DayOverviewPresenter();
+class DayOverviewScreen extends StatefulWidget {
+  DayOverviewScreen({super.key});
 
+  @override
+  State<StatefulWidget> createState() => _DayOverviewScreenState();
+}
+
+class _DayOverviewScreenState extends State<DayOverviewScreen> {
+  bool _isLoading = true;
+
+  DayOverviewPresenter _dayOverviewPresenter = DayOverviewPresenter();
   // properties for the chart so we can modify it easier
   final double chartRadius = 150;
 
@@ -20,11 +25,9 @@ class DayOverviewScreen extends StatelessWidget {
   // starts at 24 hours, reduced by screenTime and sleepTime in the actual chart build. In seconds I guess.
   int otherTime = 24;
 
-  DayOverviewScreen({super.key});
-
   // Gather ye data!
   Future<void> _loadData() async {
-    await _dayOverviewPresenter.setDay();
+    await DayOverviewPresenter.fetchSleepDay();
     setState(() {
       _isLoading = false;
       if (!(_dayOverviewPresenter.getDay() != null)) {
@@ -75,7 +78,7 @@ class DayOverviewScreen extends StatelessWidget {
                   sections: [
                     PieChartSectionData(
                       // Screen time
-                      value: screenTime,
+                      value: screenTime.toDouble(),
                       title: '',
                       badgeWidget: Icon(
                         color: Colors.white,
@@ -87,7 +90,7 @@ class DayOverviewScreen extends StatelessWidget {
                     ),
                     PieChartSectionData(
                       // Sleep
-                      value: sleepTime,
+                      value: sleepTime.toDouble(),
                       title: '',
                       badgeWidget: Icon(
                         color: Colors.white,
@@ -99,7 +102,7 @@ class DayOverviewScreen extends StatelessWidget {
                     ),
                     PieChartSectionData(
                       // "Other"
-                      value: otherTime,
+                      value: otherTime.toDouble(),
                       title: '',
                       badgeWidget: Icon(
                         color: Colors.white,

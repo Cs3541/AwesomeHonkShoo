@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../presenters/auth_presenter.dart';
-import 'login_screen.dart';
-import 'main_navigation.dart';
+import 'account_info_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -41,7 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
     } else {
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
+        MaterialPageRoute(builder: (_) => const UserAccountInfoScreen()),
         );
     }
   }
@@ -100,7 +99,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const LoginScreen(),
+                    builder: (_) => const UserAccountInfoScreen(),
                   ),
                 );
               },

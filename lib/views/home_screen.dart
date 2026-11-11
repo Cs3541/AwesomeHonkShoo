@@ -17,11 +17,10 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         child: const Row(
           children: [
-            Icon(Icons.campaign, color: Colors.white),
             SizedBox(width: 8),
             Expanded(
               child: Text(
-                'Special offer available now!',
+                'Awesome HonkShoo',
                 style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
               ),
             ),

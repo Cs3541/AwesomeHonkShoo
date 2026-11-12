@@ -32,6 +32,37 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _handleForgotPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter your email first.';
+      });
+      return;
+    }
+
+    final error = await _presenter.resetPassword(email);
+
+    if (!mounted) return;
+
+    if (error != null) {
+      setState(() {
+        _errorMessage = error;
+      });
+    } else {
+      setState(() {
+        _errorMessage = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password reset email sent.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,19 +81,24 @@ class _LoginScreenState extends State<LoginScreen> {
                   color: Colors.red,
                 ),
               ),
+              const SizedBox(height: 20),
 
             TextField(
               controller: _emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
+                border: OutlineInputBorder(),
               ),
             ),
+
+            const SizedBox(height: 16),
 
             TextField(
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(
                 labelText: 'Password',
+                border: OutlineInputBorder(),
               ),
             ),
 
@@ -87,9 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             TextButton(
-              onPressed: () {
-            // reset password
-            },
+              onPressed: _handleForgotPassword,
               child: const Text('Forgot Password?'),
             ),
           ],

@@ -78,11 +78,32 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Stack(
           children:[
             const Positioned(
-              top: 0,
+              top: 10,
               left: 0,
+              right: 200,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 221, 0),
+                size: 40
+              ),
+            ),
+
+            const Positioned(
+              top: 350,
+              left: 300,
               right: 0,
               child: Icon(
-                Icons.star, color: Color.fromARGB(255, 255, 221, 0), size: 20
+                Icons.star, color: Color.fromARGB(255, 255, 221, 0),
+                size: 40
+              ),
+            ),
+
+            const Positioned(
+              bottom: 200,
+              left: 0,
+              right: 250,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 221, 0),
+                size: 40
               ),
             ),
 
@@ -103,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const Icon(
                   Icons.nightlight_round,
                   color: Color(0xFFB39DDB),
-                  size: 70,
+                  size: 120,
                 ),
 
                 const SizedBox(height: 30),

@@ -14,30 +14,37 @@ class DayOverviewScreen extends StatefulWidget {
 class _DayOverviewScreenState extends State<DayOverviewScreen> {
   bool _isLoading = true;
 
-  DayOverviewPresenter _dayOverviewPresenter = DayOverviewPresenter();
+  DayOfSleep? _dayOfSleep;
   // properties for the chart so we can modify it easier
   final double chartRadius = 150;
 
-  // should be fetched from database; in seconds
-  int screenTime = 5;
-  // should be fetched from database; in seconds
+  // should be fetched from database; in minutes
+  int screenTime = 15;
+  // should be fetched from database; in minutes
   int sleepTime = 8;
-  // starts at 24 hours, reduced by screenTime and sleepTime in the actual chart build. In seconds I guess.
+  // starts at 24 hours, reduced by screenTime and sleepTime in the actual chart build. In minutes.
   int otherTime = 24;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
 
   // Gather ye data!
   Future<void> _loadData() async {
-    await DayOverviewPresenter.fetchSleepDay();
-    setState(() {
-      _isLoading = false;
-      if (!(_dayOverviewPresenter.getDay() != null)) {
-        return;
-      }
-      sleepTime = _dayOverviewPresenter.getDay()?.getSecondsOfSleep() ?? 1;
-      screenTime =
-          _dayOverviewPresenter.getDay()?.getSecondsOfScreenTime() ?? 1;
-      otherTime = _dayOverviewPresenter.getDay()?.getSecondsOfWakeTime() ?? 1;
-    });
+    try {
+      _dayOfSleep = await DayOverviewPresenter.fetchSleepDay();
+    } catch (e) {
+      print("Error" + e.toString());
+    } finally {
+      setState(() {
+        sleepTime = _dayOfSleep?.getMinutesOfSleep() ?? 1;
+        screenTime = _dayOfSleep?.getMinutesOfScreenTime() ?? 1;
+        otherTime = _dayOfSleep?.getMinutesOfWakeTime() ?? 1;
+        _isLoading = false;
+      });
+    }
   }
 
   @override
@@ -48,77 +55,155 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Day Overview')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.symmetric(
-                vertical: 0,
-                horizontal: screenWidth * 0.15,
-              ),
-              child: SizedBox(
-                height: 200,
-                child: TextField(
-                  maxLines: null,
-                  expands: true,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                    hintText: "Notes...",
-                    border: OutlineInputBorder(),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: SizedBox(
+                      height: 200,
+                      child: TextField(
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: "Notes...",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Expanded(
+                    child: PieChart(
+                      PieChartData(
+                        pieTouchData: PieTouchData(
+                          enabled: true,
+                          touchCallback:
+                              (
+                                FlTouchEvent event,
+                                PieTouchResponse? touchResponse,
+                              ) {
+                                setState(() {
+                                  if (!event.isInterestedForInteractions ||
+                                      touchResponse == null ||
+                                      touchResponse.touchedSection == null) {
+                                    // Handle touch exit or empty area
+                                    return;
+                                  }
+
+                                  final touchedIndex = touchResponse
+                                      .touchedSection!
+                                      .touchedSectionIndex;
+                                  // You can use touchedIndex to know which slice was tapped or hovered
+                                });
+                              },
+                        ),
+                        sectionsSpace: 4,
+                        centerSpaceRadius: 0,
+                        sections: [
+                          PieChartSectionData(
+                            // Screen time
+                            value: screenTime.toDouble(),
+                            title: '',
+                            badgeWidget: Icon(
+                              color: Colors.white,
+                              Icons.phone_android,
+                              size: 48,
+                            ),
+                            color: Colors.blue,
+                            radius: chartRadius,
+                          ),
+                          PieChartSectionData(
+                            // Sleep
+                            value: sleepTime.toDouble(),
+                            title: '',
+                            badgeWidget: Icon(
+                              color: Colors.white,
+                              Icons.nightlight_round_outlined,
+                              size: 48,
+                            ),
+                            color: Colors.purple,
+                            radius: chartRadius,
+                          ),
+                          PieChartSectionData(
+                            // "Other"
+                            value: otherTime.toDouble(),
+                            title: '',
+                            badgeWidget: Icon(
+                              color: Colors.white,
+                              Icons.sunny,
+                              size: 48,
+                            ),
+                            color: Colors.orange,
+                            radius: chartRadius,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      child: TextField(
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: "Bedtime...",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      child: TextField(
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: "Wake-up time...",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: SizedBox(
+                      height: 50,
+                      child: TextField(
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: "Screen time...",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Expanded(
-              child: PieChart(
-                PieChartData(
-                  sectionsSpace: 4,
-                  centerSpaceRadius: 0,
-                  sections: [
-                    PieChartSectionData(
-                      // Screen time
-                      value: screenTime.toDouble(),
-                      title: '',
-                      badgeWidget: Icon(
-                        color: Colors.white,
-                        Icons.phone_android,
-                        size: 48,
-                      ),
-                      color: Colors.blue,
-                      radius: chartRadius,
-                    ),
-                    PieChartSectionData(
-                      // Sleep
-                      value: sleepTime.toDouble(),
-                      title: '',
-                      badgeWidget: Icon(
-                        color: Colors.white,
-                        Icons.nightlight_round_outlined,
-                        size: 48,
-                      ),
-                      color: Colors.purple,
-                      radius: chartRadius,
-                    ),
-                    PieChartSectionData(
-                      // "Other"
-                      value: otherTime.toDouble(),
-                      title: '',
-                      badgeWidget: Icon(
-                        color: Colors.white,
-                        Icons.sunny,
-                        size: 48,
-                      ),
-                      color: Colors.orange,
-                      radius: chartRadius,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }

@@ -9,7 +9,7 @@ class DayOfSleep {
   static final _auth = FirebaseAuth.instance;
 
   // used to calculate screen time (sorry)
-  static const int secondsInADay = 86400;
+  static const int minutesInADay = 1440;
 
   // Hopefully unique.
   final String id;
@@ -40,19 +40,19 @@ class DayOfSleep {
   }
 
   // used to compare to other values of a pie chart easily, since floats of time elapsed don't exist I guess
-  int getSecondsOfSleep() {
-    return getDurationOfSleep().inSeconds;
+  int getMinutesOfSleep() {
+    return getDurationOfSleep().inMinutes;
   }
 
-  int getSecondsOfScreenTime() {
+  int getMinutesOfScreenTime() {
     return screenTime;
   }
 
-  int getSecondsOfWakeTime() {
+  int getMinutesOfWakeTime() {
     // min of 0 seconds obviously
     return max(
       0,
-      secondsInADay - getSecondsOfScreenTime() - getSecondsOfSleep(),
+      minutesInADay - getMinutesOfScreenTime() - getMinutesOfSleep(),
     );
   }
 }

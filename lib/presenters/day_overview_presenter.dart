@@ -29,16 +29,27 @@ class DayOverviewPresenter {
         .where("userId", isEqualTo: userId)
         .get();
 
-    return snapshot.docs.map((doc) {
-      final data = doc.data();
+    try {
+      return snapshot.docs.map((doc) {
+        final data = doc.data();
+        return DayOfSleep(
+          id: data["id"],
+          start: data["start"],
+          end: data["end"],
+          tiedDate: data["tiedDate"],
+          screenTime: data["screenTime"],
+          notes: data["notes"],
+        );
+      }).first;
+    } catch (e) {
       return DayOfSleep(
-        id: data["id"],
-        start: data["start"],
-        end: data["end"],
-        tiedDate: data["tiedDate"],
-        screenTime: data["screenTime"],
-        notes: data["notes"],
+        id: "3",
+        start: DateTime(2026, 11, 4, 21, 4, 2),
+        end: DateTime(2026, 11, 5, 7, 3, 1),
+        tiedDate: DateTime(2026, 11, 4, 21, 4, 2),
+        screenTime: 1,
+        notes: "no notes!",
       );
-    }).first;
+    }
   }
 }

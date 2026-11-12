@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../presenters/auth_presenter.dart';
-import 'account_info_screen.dart';
+import 'login_screen.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -40,9 +40,47 @@ class _SignupScreenState extends State<SignupScreen> {
     } else {
         Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const UserAccountInfoScreen()),
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
         );
     }
+  }
+
+  void _showAccountInfoDialog() {
+  String name = '';
+  TimeOfDay sleepStart;
+  TimeOfDay sleepEnd;
+  DateTime birthday;
+
+  showDialog(
+    context: context,
+    builder: (dialogContext) {
+        return StatefulBuilder(
+        builder(context, setDialogState) {
+            return AlertDialog(
+                title: const Text('Add user data'),
+                content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                        TextField(
+                            autofocus: true,
+                            decoration: const InputDecoration(hintText: 'First and Last name'),
+                            onChanged: (value) {
+                                name = value;
+                            },
+                        ),
+                    ],
+                ),
+                actions: [
+                    TextButton(
+                        onPressed: () async {
+                            final picked = await showDatePicker(
+                                context: context,
+                                initalDate: DateTime.now(),
+                                firstDate: DateTime(1900),
+                                lastDate: DateTime(2030),
+                            );
+
+
   }
 
   @override
@@ -99,7 +137,7 @@ class _SignupScreenState extends State<SignupScreen> {
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => const UserAccountInfoScreen(),
+                    builder: (_) => const LoginScreen(),
                   ),
                 );
               },

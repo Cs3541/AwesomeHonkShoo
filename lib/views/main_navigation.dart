@@ -1,4 +1,5 @@
 import 'package:awesome_honk_shoo_app/views/day_overview.dart';
+import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';

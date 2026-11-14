@@ -98,7 +98,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
 
             const Positioned(
-              bottom: 200,
+              bottom: 10,
               left: 0,
               right: 250,
               child: Icon(
@@ -107,7 +107,27 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
 
-          Padding(
+            const Positioned(
+              top: 90,
+              left: 100,
+              right: 0,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 255, 255),
+                size: 20
+              ),
+            ),
+
+            const Positioned(
+              bottom: 1,
+              left: 100,
+              right: 0,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 255, 255),
+                size: 20
+              ),
+            ),
+
+          SingleChildScrollView(
             padding: const EdgeInsets.all(16.0),
             child: Column(
               children: [
@@ -127,7 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   size: 120,
                 ),
 
-                const SizedBox(height: 30),
+                const SizedBox(height: 50),
 
                 TextField(
                   controller: _emailController,
@@ -163,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 30),
 
                 ElevatedButton(
                   onPressed: _handleLogin,

@@ -1,6 +1,7 @@
 import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_honk_shoo_app/views/caffeine_log_screen.dart';
 import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -46,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(
                       builder: (context) => ProfileScreen(),
                     ),
-                   );
+                  );
                 },
                 icon: const Icon(Icons.account_circle),
               )
@@ -84,12 +85,38 @@ class _HomeScreenState extends State<HomeScreen> {
                 _isSleeping ? 'Wake Up' : 'Go to Sleep',
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
+
+            const SizedBox(height: 20),
+
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CaffeineLogScreen(),
+                  ),
+                );
               },
-              child: const Text('Log Out'),
+              icon: const Icon(Icons.local_cafe),
+              label: const Text('Create Log / Caffeine'),
             ),
+            
+
+            const SizedBox(height: 20),
+
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CaffeineLogScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.local_cafe),
+              label: const Text('Create Log / Caffeine'),
+            ),
+            
           ],
         ),
       ),

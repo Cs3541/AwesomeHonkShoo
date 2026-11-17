@@ -101,6 +101,22 @@ class _HomeScreenState extends State<HomeScreen> {
               label: const Text('Create Log / Caffeine'),
             ),
             
+
+            const SizedBox(height: 20),
+
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CaffeineLogScreen(),
+                  ),
+                );
+              },
+              icon: const Icon(Icons.local_cafe),
+              label: const Text('Create Log / Caffeine'),
+            ),
+            
             ElevatedButton(
               onPressed: () async {
                 await FirebaseAuth.instance.signOut();

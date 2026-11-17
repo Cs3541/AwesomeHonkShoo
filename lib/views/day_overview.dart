@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:awesome_honk_shoo_app/models/day_overview_model.dart';
 import 'package:awesome_honk_shoo_app/presenters/day_overview_presenter.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,16 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
   DayOfSleep? _dayOfSleep;
   // properties for the chart so we can modify it easier
   final double chartRadius = 150;
+
+  // pie chart data itself
+  final List<Map<String, dynamic>> pieChartData = [
+    {'label': 'Screen Time', 'value': 10},
+    {'label': 'Sleep', 'value': 10},
+    {'label': 'Awake', 'value': 10},
+  ];
+
+  // determines what value to display in the text box below the pie chart
+  int pieChartTouchedIndex = -1;
 
   // should be fetched from database; in minutes
   int screenTime = 15;
@@ -42,9 +54,17 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
         sleepTime = _dayOfSleep?.getMinutesOfSleep() ?? 1;
         screenTime = _dayOfSleep?.getMinutesOfScreenTime() ?? 1;
         otherTime = _dayOfSleep?.getMinutesOfWakeTime() ?? 1;
+        readyPieChartData();
         _isLoading = false;
       });
     }
+  }
+
+  // matches pie chart data to the ACTUAL data yippe wahoo
+  void readyPieChartData() {
+    pieChartData.elementAt(0)["value"] = screenTime;
+    pieChartData.elementAt(1)["value"] = sleepTime;
+    pieChartData.elementAt(2)["value"] = otherTime;
   }
 
   @override
@@ -79,6 +99,15 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                       ),
                     ),
                   ),
+                  Text(
+                    pieChartTouchedIndex != -1
+                        ? '${pieChartData[pieChartTouchedIndex]['label']}: ${pieChartData[pieChartTouchedIndex]['value']}%'
+                        : 'pssst',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      //fontWeight: FontWeight.bold,
+                    ),
+                  ),
                   Expanded(
                     child: PieChart(
                       PieChartData(
@@ -87,20 +116,18 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                           touchCallback:
                               (
                                 FlTouchEvent event,
-                                PieTouchResponse? touchResponse,
+                                PieTouchResponse? pieTouchResponse,
                               ) {
                                 setState(() {
                                   if (!event.isInterestedForInteractions ||
-                                      touchResponse == null ||
-                                      touchResponse.touchedSection == null) {
-                                    // Handle touch exit or empty area
+                                      pieTouchResponse == null ||
+                                      pieTouchResponse.touchedSection == null) {
+                                    pieChartTouchedIndex = -1;
                                     return;
                                   }
-
-                                  final touchedIndex = touchResponse
+                                  pieChartTouchedIndex = pieTouchResponse
                                       .touchedSection!
                                       .touchedSectionIndex;
-                                  // You can use touchedIndex to know which slice was tapped or hovered
                                 });
                               },
                         ),
@@ -109,7 +136,7 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                         sections: [
                           PieChartSectionData(
                             // Screen time
-                            value: screenTime.toDouble(),
+                            value: pieChartData[0]["value"].toDouble(),
                             title: '',
                             badgeWidget: Icon(
                               color: Colors.white,
@@ -121,7 +148,7 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                           ),
                           PieChartSectionData(
                             // Sleep
-                            value: sleepTime.toDouble(),
+                            value: pieChartData[1]["value"].toDouble(),
                             title: '',
                             badgeWidget: Icon(
                               color: Colors.white,
@@ -133,7 +160,7 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                           ),
                           PieChartSectionData(
                             // "Other"
-                            value: otherTime.toDouble(),
+                            value: pieChartData[2]["value"].toDouble(),
                             title: '',
                             badgeWidget: Icon(
                               color: Colors.white,

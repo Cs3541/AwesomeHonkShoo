@@ -45,44 +45,97 @@ class _SignupScreenState extends State<SignupScreen> {
     }
   }
 
-  void _showAccountInfoDialog() {
+void _showAccountInfoDialog() {
   String name = '';
-  TimeOfDay sleepStart;
-  TimeOfDay sleepEnd;
-  DateTime birthday;
+  TimeOfDay? sleepStart;
+  TimeOfDay? sleepEnd;
+  DateTime? birthday;
 
   showDialog(
     context: context,
     builder: (dialogContext) {
-        return StatefulBuilder(
-        builder(context, setDialogState) {
-            return AlertDialog(
-                title: const Text('Add user data'),
-                content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                        TextField(
-                            autofocus: true,
-                            decoration: const InputDecoration(hintText: 'First and Last name'),
-                            onChanged: (value) {
-                                name = value;
-                            },
-                        ),
-                    ],
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          return AlertDialog(
+            title: const Text('Add user data'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                TextField(
+                  autofocus: true,
+                  decoration: const InputDecoration(hintText: 'First and Last name'),
+                  onChanged: (value) {
+                    name = value;
+                  },
                 ),
-                actions: [
-                    TextButton(
-                        onPressed: () async {
-                            final picked = await showDatePicker(
-                                context: context,
-                                initalDate: DateTime.now(),
-                                firstDate: DateTime(1900),
-                                lastDate: DateTime(2030),
-                            );
-
-
-  }
-
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2030),
+                  );
+                  if (picked != null) {
+                    setDialogState(() {
+                      birthday = picked;
+                    });
+                  }
+                },
+                child: Text(birthday == null ? 'Birthday!' : birthday.toString()),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final picked = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (picked != null) {
+                    setDialogState(() {
+                      sleepStart = picked;
+                    });
+                  }
+                },
+                child: Text(sleepStart == null ? 'Sleep Start?' : sleepStart!.format(context)),
+              ),
+              TextButton(
+                onPressed: () async {
+                  final picked = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (picked != null) {
+                    setDialogState(() {
+                      sleepEnd = picked;
+                    });
+                  }
+                },
+                child: Text(sleepEnd == null ? 'Sleep End?' : sleepEnd!.format(context)),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Not today'),
+              ),
+              TextButton(
+                onPressed:() async {
+                    if(name.trim().isNotEmpty) {
+                        await _presenter.addUser(name.trim(), sleepStart, sleepEnd);
+                        setState(() {});
+                    }
+                Navigator.pop(context);
+                },
+                child: const Text('Add'),
+               ),
+            ],
+          );
+        },
+      );
+    },
+  );`
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(

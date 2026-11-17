@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     MaterialPageRoute(
                       builder: (context) => ProfileScreen(),
                     ),
-                   );
+                  );
                 },
                 icon: const Icon(Icons.account_circle),
               )

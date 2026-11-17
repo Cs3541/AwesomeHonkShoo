@@ -117,12 +117,6 @@ class _HomeScreenState extends State<HomeScreen> {
               label: const Text('Create Log / Caffeine'),
             ),
             
-            ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              },
-              child: const Text('Log Out'),
-            ),
           ],
         ),
       ),

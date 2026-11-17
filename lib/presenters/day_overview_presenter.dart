@@ -47,7 +47,7 @@ class DayOverviewPresenter {
         start: DateTime(2026, 11, 4, 21, 4, 2),
         end: DateTime(2026, 11, 5, 7, 3, 1),
         tiedDate: DateTime(2026, 11, 4, 21, 4, 2),
-        screenTime: 1,
+        screenTime: 49,
         notes: "no notes!",
       );
     }

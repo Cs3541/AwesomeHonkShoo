@@ -22,9 +22,9 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
 
   // pie chart data itself
   final List<Map<String, dynamic>> pieChartData = [
-    {'label': 'Screen Time', 'value': 10},
-    {'label': 'Sleep', 'value': 10},
-    {'label': 'Awake', 'value': 10},
+    {'label': 'On screens', 'value': 10},
+    {'label': 'Asleep', 'value': 10},
+    {'label': 'Awake and off screens', 'value': 10},
   ];
 
   // determines what value to display in the text box below the pie chart
@@ -101,10 +101,10 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                   ),
                   Text(
                     pieChartTouchedIndex != -1
-                        ? '${pieChartData[pieChartTouchedIndex]['label']}: ${pieChartData[pieChartTouchedIndex]['value']}%'
-                        : 'pssst',
+                        ? '${pieChartData[pieChartTouchedIndex]['label']} for ${(pieChartData[pieChartTouchedIndex]['value'] / 60.0).toStringAsFixed(2)} hours'
+                        : '',
                     style: const TextStyle(
-                      fontSize: 12,
+                      fontSize: 16,
                       //fontWeight: FontWeight.bold,
                     ),
                   ),

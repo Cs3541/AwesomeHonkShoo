@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_honk_shoo_app/models/day_overview_model.dart';
 import 'package:awesome_honk_shoo_app/presenters/day_overview_presenter.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'package:fl_chart/fl_chart.dart';
@@ -118,8 +119,6 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
     });
   }
 
-  void setBedtime() {}
-
   @override
   Widget build(BuildContext context) {
     // used for percentage-based screen sizing
@@ -140,7 +139,7 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                       horizontal: screenWidth * 0.15,
                     ),
                     child: SizedBox(
-                      height: 200,
+                      height: 120,
                       child: TextField(
                         maxLines: null,
                         expands: true,
@@ -236,8 +235,8 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                       onPressed: () {
                         modifyDateTime(true);
                       },
-                      icon: const Icon(Icons.nightlight_round_outlined),
-                      label: const Text('Edit Bedtime'),
+                      icon: const Icon(Icons.edit_calendar),
+                      label: Text('Bedtime'),
                     ),
                   ),
                   Padding(
@@ -249,8 +248,8 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                       onPressed: () {
                         modifyDateTime(false);
                       },
-                      icon: const Icon(Icons.sunny),
-                      label: const Text('Edit Wakeup Time'),
+                      icon: const Icon(Icons.edit_calendar),
+                      label: Text('Wakeup Time'),
                     ),
                   ),
                   Padding(
@@ -258,13 +257,43 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                       vertical: 4,
                       horizontal: screenWidth * 0.15,
                     ),
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        debugPrint('Add button pressed');
-                      },
-                      icon: const Icon(Icons.phone_android),
-                      label: const Text('Edit Screentime'),
+                    child: Text("Screen Time"),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: screenWidth * 0.15,
                     ),
+                    child: SizedBox(
+                      height: 120,
+                      child: CupertinoTimerPicker(
+                        mode: CupertinoTimerPickerMode
+                            .hm, // Hours and minutes only
+                        initialTimerDuration: Duration(
+                          days: 0,
+                          hours: (screenTime / 60).toInt(),
+                          minutes: screenTime % 60,
+                          seconds: 0,
+                        ),
+                        onTimerDurationChanged: (Duration newDuration) {
+                          setState(() {
+                            _dayOfSleep?.screenTime = newDuration.inMinutes;
+                            reloadDayOfSleepData();
+                          });
+                        },
+                      ),
+                    ),
+                    //child: ElevatedButton.icon(
+                    //onPressed: () {
+                    //debugPrint('Add button pressed');
+                    //},
+                    //icon: const Icon(Icons.edit),
+                    //label: Text(
+                    //'Screentime: ' +
+                    // (screenTime / 60.0).toStringAsFixed(2) +
+                    //' hours',
+                    //),
+                    //),
                   ),
                 ],
               ),

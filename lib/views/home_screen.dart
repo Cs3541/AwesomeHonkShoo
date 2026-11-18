@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: AppBar(
           backgroundColor:
             _isSleeping
-                  ? const Color(0xFF1A1930) : Colors.blueAccent,
+                  ? const Color.fromARGB(255, 34, 32, 57) : Colors.blueAccent,
           automaticallyImplyLeading: false, // Removes default back button
           title: Row(
             children: [

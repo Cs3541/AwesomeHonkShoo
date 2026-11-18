@@ -1,5 +1,8 @@
+import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:awesome_honk_shoo_app/views/caffeine_log_screen.dart';
+import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -20,6 +23,38 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(56.0),
+        child: AppBar(
+          backgroundColor: Colors.blueAccent,
+          automaticallyImplyLeading: false, // Removes default back button
+          title: Row(
+            children: [
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  'Awesome HonkShoo',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              IconButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ProfileScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.account_circle),
+              )
+            ],
+          ),
+        ),
+      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -50,11 +85,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 _isSleeping ? 'Wake Up' : 'Go to Sleep',
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
+
+            const SizedBox(height: 20),
+
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const CaffeineLogScreen(),
+                  ),
+                );
               },
-              child: const Text('Log Out'),
+              icon: const Icon(Icons.local_cafe),
+              label: const Text('Create Log / Caffeine'),
             ),
           ],
         ),

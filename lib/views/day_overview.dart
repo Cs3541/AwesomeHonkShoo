@@ -51,13 +51,18 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
       print("Error" + e.toString());
     } finally {
       setState(() {
-        sleepTime = _dayOfSleep?.getMinutesOfSleep() ?? 1;
-        screenTime = _dayOfSleep?.getMinutesOfScreenTime() ?? 1;
-        otherTime = _dayOfSleep?.getMinutesOfWakeTime() ?? 1;
-        readyPieChartData();
+        reloadDayOfSleepData();
         _isLoading = false;
       });
     }
+  }
+
+  // run whenever properties in the DayOfSleep change, or the day itself changes.
+  void reloadDayOfSleepData() {
+    sleepTime = _dayOfSleep?.getMinutesOfSleep() ?? 1;
+    screenTime = _dayOfSleep?.getMinutesOfScreenTime() ?? 1;
+    otherTime = _dayOfSleep?.getMinutesOfWakeTime() ?? 1;
+    readyPieChartData();
   }
 
   // matches pie chart data to the ACTUAL data yippe wahoo

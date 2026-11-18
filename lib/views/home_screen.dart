@@ -23,10 +23,13 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: _isSleeping ? const Color(0xFF151326) : Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56.0),
         child: AppBar(
-          backgroundColor: Colors.blueAccent,
+          backgroundColor:
+            _isSleeping
+                  ? const Color(0xFF1A1930) : Colors.blueAccent,
           automaticallyImplyLeading: false, // Removes default back button
           title: Row(
             children: [
@@ -49,7 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   );
                 },
-                icon: const Icon(Icons.account_circle),
+                icon: const Icon(Icons.account_circle), color: Colors.white,
               )
             ],
           ),
@@ -59,12 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Text(
+            Text(
               'Current Sleep Status:',
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
+                color: _isSleeping ? Colors.white : Colors.black,
               ),
             ),
             const SizedBox(height: 20),
@@ -88,6 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 20),
 
+            if (!_isSleeping)
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.push(

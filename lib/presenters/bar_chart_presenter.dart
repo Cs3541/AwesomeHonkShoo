@@ -14,6 +14,16 @@ class BarChartPresenter {
   // Treat days without recorded sleep as zero-height bars.
   double hoursForDay(int day) => _model.daily[day] ?? 0;
 
+  // Average only recorded days; missing days are not treated as zero sleep.
+  // Return null for an empty month so the view does not invent an average.
+  double? get averageHours => _model.daily.isEmpty
+      ? null
+      : _model.daily.values.fold<double>(0, (sum, hours) => sum + hours) /
+            _model.daily.length;
+
+  // Expose the denominator so the popup explains what its average represents.
+  int get loggedDays => _model.daily.length;
+
   // Leave one hour of space above the tallest bar, with a ten-hour baseline.
   double get maximumHours {
     double maximum = 10;

@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 
 import '../models/calendar_model.dart';
+import '../models/bar_chart_model.dart';
 import '../models/sleep_log.dart';
 
 // Notifies the calendar view when its date or month changes.
@@ -15,6 +16,62 @@ class CalendarPresenter extends ChangeNotifier {
   int _loadVersion = 0;
   bool loading = false;
   String? error;
+
+  // Expose draft controls without querying journal entries or ratings.
+  String get journalQuery => _model.journalQuery;
+  int? get selectedRating => _model.selectedRating;
+
+  // Remember typed search text for the future search integration.
+  void updateJournalQuery(String query) {
+    _model.journalQuery = query;
+    // Old results no longer describe the edited search criteria.
+    _model.clearMatchedDays();
+    notifyListeners();
+  }
+
+  // Store an exact 0–5 rating, or null for Any, without filtering real data yet.
+  void setSelectedRating(int? rating) {
+    if (rating != null && (rating < 0 || rating > 5)) {
+      throw ArgumentError.value(
+        rating,
+        'rating',
+        'Must be 0–5 or null for Any',
+      );
+    }
+    _model.selectedRating = rating;
+    // Recompute matching dates after a filter change once data is connected.
+    _model.clearMatchedDays();
+    notifyListeners();
+  }
+
+  // The view asks only whether a date matches; it does not perform searches.
+  bool isMatchedDay(DateTime day) => _model.isMatchedDay(day);
+
+  // INTEGRATION: after journal search and rating filtering, pass the final matching
+  // dates here. If both controls are active, pass dates satisfying both criteria.
+  // This updates highlights only; it never queries or edits Day Overview data.
+  void showMatchingDays(Iterable<DateTime> days) {
+    _model.replaceMatchedDays(days);
+    notifyListeners();
+  }
+
+  // Restore ordinary sleep colors when results are dismissed or criteria cleared.
+  void clearMatchingDays() {
+    _model.clearMatchedDays();
+    notifyListeners();
+  }
+
+  // Pass the displayed month's totals to the separate chart model without
+  // mixing chart calculations into calendar navigation or search highlights.
+  BarChartModel get monthlyChart => BarChartModel(
+    month: displayedMonth,
+    daily: {
+      for (final entry in _model.dailyHours.entries)
+        if (entry.key.year == displayedMonth.year &&
+            entry.key.month == displayedMonth.month)
+          entry.key.day: entry.value,
+    },
+  );
 
   // Provide duration categories while keeping color choices in the view.
   SleepDurationBand bandForDay(DateTime day) => _model.bandForDay(day);

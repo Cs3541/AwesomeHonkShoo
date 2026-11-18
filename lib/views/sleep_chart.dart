@@ -7,16 +7,10 @@ import '../presenters/bar_chart_presenter.dart';
 
 // Renders the reusable sleep chart without adding it to the calendar tab.
 class SleepChart extends StatelessWidget {
-  // Accept chart inputs and a callback for the hosting screen.
-  const SleepChart({
-    super.key,
-    required this.month,
-    required this.daily,
-    required this.onSelect,
-  });
+  // Accept the month and recorded daily totals for a display-only chart.
+  const SleepChart({super.key, required this.month, required this.daily});
   final DateTime month;
   final Map<int, double> daily;
-  final ValueChanged<int> onSelect;
 
   // Build chart bars from presenter values and apply the app theme.
   @override
@@ -41,7 +35,7 @@ class SleepChart extends StatelessWidget {
         ),
       );
     }
-    // Draw the axes and forward tapped days to the hosting screen.
+    // Draw the bars and axes without navigation or touch interactions.
     return BarChart(
       BarChartData(
         minY: 0,
@@ -76,13 +70,8 @@ class SleepChart extends StatelessWidget {
         ),
         gridData: const FlGridData(drawVerticalLine: false),
         borderData: FlBorderData(show: false),
-        barTouchData: BarTouchData(
-          touchCallback: (event, response) {
-            if (event is FlTapUpEvent && response?.spot != null) {
-              onSelect(response!.spot!.touchedBarGroup.x);
-            }
-          },
-        ),
+        // Keep the chart display-only when tapped or hovered.
+        barTouchData: BarTouchData(enabled: false),
       ),
     );
   }

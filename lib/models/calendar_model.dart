@@ -19,6 +19,28 @@ class CalendarModel {
   late DateTime selectedDate;
   late DateTime displayedMonth;
 
+  // Hold draft search controls until journal and rating data are connected.
+  String journalQuery = '';
+  // Null means Any; zero is a distinct selectable rating for future data.
+  int? selectedRating;
+
+  // Keep result dates separate from sleep totals so clearing results restores sleep colors.
+  final Set<DateTime> _matchedDays = {};
+
+  // Future search/filter code supplies its final matching dates here, across any months.
+  void replaceMatchedDays(Iterable<DateTime> days) {
+    _matchedDays
+      ..clear()
+      ..addAll(days.map((day) => DateTime(day.year, day.month, day.day)));
+  }
+
+  // Compare calendar dates only so timestamps with a time component still match.
+  bool isMatchedDay(DateTime day) =>
+      _matchedDays.contains(DateTime(day.year, day.month, day.day));
+
+  // Remove result markers without changing selection or recorded sleep data.
+  void clearMatchedDays() => _matchedDays.clear();
+
   // Store totals by wake-up date; missing dates remain distinct from zero hours.
   final Map<DateTime, double> dailyHours = {};
 

@@ -3,30 +3,34 @@ import 'package:flutter/material.dart';
 import 'package:awesome_honk_shoo_app/views/caffeine_log_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final bool isSleeping;
+  final ValueChanged<bool> onSleepStatusChanged;
+  const HomeScreen({super.key,
+    required this.isSleeping,
+    required this.onSleepStatusChanged,
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool _isSleeping = false;
 
   void _toggleSleepStatus() {
-    setState(() {
-      _isSleeping = !_isSleeping;
-    });
+    widget.onSleepStatusChanged(
+    !widget.isSleeping,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: _isSleeping ? const Color(0xFF151326) : Colors.white,
+      backgroundColor: widget.isSleeping ? const Color(0xFF151326) : Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56.0),
         child: AppBar(
           backgroundColor:
-            _isSleeping
+            widget.isSleeping
                   ? const Color.fromARGB(255, 34, 32, 57) : Colors.blueAccent,
           automaticallyImplyLeading: false, // Removes default back button
           title: Row(
@@ -66,17 +70,17 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: _isSleeping ? Colors.white : Colors.black,
+                color: widget.isSleeping ? Colors.white : Colors.black,
               ),
             ),
             const SizedBox(height: 20),
 
             Text(
-              _isSleeping ? 'Sleeping' : 'Awake',
+              widget.isSleeping ? 'Sleeping' : 'Awake',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: _isSleeping ? const Color.fromARGB(255, 33, 40, 243) : Colors.orange,
+                color: widget.isSleeping ? const Color.fromARGB(255, 33, 40, 243) : Colors.orange,
               ),
             ),
             const SizedBox(height: 30),
@@ -84,13 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ElevatedButton(
               onPressed: _toggleSleepStatus,
               child: Text(
-                _isSleeping ? 'Wake Up' : 'Go to Sleep',
+                widget.isSleeping ? 'Wake Up' : 'Go to Sleep',
               ),
             ),
 
             const SizedBox(height: 20),
 
-            if (!_isSleeping)
+            if (!widget.isSleeping)
             ElevatedButton.icon(
               onPressed: () {
                 Navigator.push(

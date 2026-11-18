@@ -1,5 +1,4 @@
 import 'package:awesome_honk_shoo_app/views/day_overview.dart';
-import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'home_screen.dart';
@@ -31,7 +30,8 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_selectedIndex],
+      // Keep tab state alive so the calendar retains its selected day.
+      body: IndexedStack(index: _selectedIndex, children: _screens),
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

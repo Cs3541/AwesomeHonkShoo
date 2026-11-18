@@ -14,19 +14,19 @@ class DayOfSleep {
   // Hopefully unique.
   final String id;
   // Time you went to bed.
-  final DateTime start;
+  DateTime start;
   // Time you woke up.
-  final DateTime end;
+  DateTime end;
   // Seconds you were on your phone.
-  final int screenTime;
+  int screenTime;
   // The day that the sleep is "recorded" for.
   // For instance, if you went to bed at 10:00 pm on Saturday, this will show up when you open up Saturday.
   // If you go to bed at 2:30 am on Sunday, it will still count as Saturday's sleep. This is why this variable exists.
-  final DateTime tiedDate;
+  DateTime tiedDate;
   // (Optional) Notes on the day of sleep.
-  final String notes;
+  String notes;
 
-  const DayOfSleep({
+  DayOfSleep({
     required this.id,
     required this.start,
     required this.end,
@@ -34,6 +34,20 @@ class DayOfSleep {
     this.screenTime = 0,
     this.notes = '',
   });
+
+  // my glorious setters!
+  // these setters are all accessible by user actions on the day overview screen
+  void setStart(DateTime start) {
+    this.start = start;
+  }
+
+  void setEnd(DateTime end) {
+    this.end = end;
+  }
+
+  void setScreenTime(int screenTime) {
+    this.screenTime = screenTime;
+  }
 
   Duration getDurationOfSleep() {
     return end.difference(start);

@@ -72,6 +72,54 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
     pieChartData.elementAt(2)["value"] = otherTime;
   }
 
+  // if isBedtime is true, it'll set the bedtime instead of waketime.
+  Future<void> modifyDateTime(bool isBedtime) async {
+    DateTime initialDateTime;
+    if (isBedtime) {
+      initialDateTime = _dayOfSleep?.start ?? DateTime.now();
+    } else {
+      initialDateTime = _dayOfSleep?.end ?? DateTime.now();
+    }
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDateTime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2200),
+    );
+
+    // give up if the user wimped out
+    if (pickedDate == null || !mounted) return;
+
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initialDateTime),
+    );
+
+    // give up if the user wimped out AGAIN
+    if (pickedTime == null || !mounted) return;
+
+    DateTime result;
+    // when day and time are selected, set it to either bedtime or waketime, then update all that stuff
+    setState(() {
+      result = DateTime(
+        pickedDate.year,
+        pickedDate.month,
+        pickedDate.day,
+        pickedTime.hour,
+        pickedTime.minute,
+      );
+      if (isBedtime) {
+        _dayOfSleep?.setStart(result);
+      } else {
+        _dayOfSleep?.setEnd(result);
+      }
+      reloadDayOfSleepData();
+    });
+  }
+
+  void setBedtime() {}
+
   @override
   Widget build(BuildContext context) {
     // used for percentage-based screen sizing
@@ -181,56 +229,41 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: 0,
+                      vertical: 4,
                       horizontal: screenWidth * 0.15,
                     ),
-                    child: SizedBox(
-                      height: 50,
-                      child: TextField(
-                        maxLines: null,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: "Bedtime...",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        modifyDateTime(true);
+                      },
+                      icon: const Icon(Icons.nightlight_round_outlined),
+                      label: const Text('Edit Bedtime'),
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: 0,
+                      vertical: 4,
                       horizontal: screenWidth * 0.15,
                     ),
-                    child: SizedBox(
-                      height: 50,
-                      child: TextField(
-                        maxLines: null,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: "Wake-up time...",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        modifyDateTime(false);
+                      },
+                      icon: const Icon(Icons.sunny),
+                      label: const Text('Edit Wakeup Time'),
                     ),
                   ),
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      vertical: 0,
+                      vertical: 4,
                       horizontal: screenWidth * 0.15,
                     ),
-                    child: SizedBox(
-                      height: 50,
-                      child: TextField(
-                        maxLines: null,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: "Screen time...",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
+                    child: ElevatedButton.icon(
+                      onPressed: () {
+                        debugPrint('Add button pressed');
+                      },
+                      icon: const Icon(Icons.phone_android),
+                      label: const Text('Edit Screentime'),
                     ),
                   ),
                 ],

@@ -1,5 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import './account_info.dart';
+
 // password is hello!
+
 
 class AuthModel{
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -15,11 +18,13 @@ class AuthModel{
       }
     }
 
-  Future<String?> signUp(String email, String password) async {
+  Future<String?> signUp(String email, String password, AccountInfo info) async {
     try {
       await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
+
+    // Need to implement ability to store data for the user.
       );
       return null;
     } catch (e) {

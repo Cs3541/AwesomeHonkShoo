@@ -1,3 +1,4 @@
+import '../models/account_info.dart';
 import '../models/auth_model.dart';
 
 class AuthPresenter {
@@ -7,8 +8,8 @@ class AuthPresenter {
     return _model.login(email, password);
   }
 
-  Future<String?> signUp(String email, String password) {
-    return _model.signUp(email, password);
+  Future<String?> signUp(String email, String password, AccountInfo info) {
+    return _model.signUp(email, password, info);
   }
 
   Future<void> logout() => _model.signOut();

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../presenters/auth_presenter.dart';
 import 'login_screen.dart';
-
+import '../models/account_info.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -29,9 +29,13 @@ class _SignupScreenState extends State<SignupScreen> {
       return;
     }
 
+    final info = await _showAccountInfoDialog();
+    if (info == null || !mounted) return;
+
     final error = await _presenter.signUp(
       _emailController.text.trim(),
       password,
+      info,
     );
 
     if (!mounted) return;
@@ -46,6 +50,98 @@ class _SignupScreenState extends State<SignupScreen> {
         );
     }
   }
+
+Future<AccountInfo?> _showAccountInfoDialog() {
+  DateTime? birthday;
+  TimeOfDay? sleepStart;
+  TimeOfDay? sleepEnd;
+  String name = '';
+
+  return showDialog<AccountInfo>(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) {
+      // StatefulBuilder lets the dialog rebuild when a picker returns
+      return StatefulBuilder(
+        builder: (context, setDialogState) {
+          final ready =
+              birthday != null && sleepStart != null && sleepEnd != null;
+
+          return AlertDialog(
+            title: const Text('A little more about you'),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: const Text('Birthday'),
+                  subtitle: Text(birthday == null
+                      ? 'Tap to pick'
+                      : '${birthday!.month}/${birthday!.day}/${birthday!.year}'),
+                  onTap: () async {
+                    final picked = await showDatePicker(
+                      context: context,
+                      initialDate: DateTime(2000),
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime.now(),
+                    );
+                    if (picked != null) setDialogState(() => birthday = picked);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Bedtime'),
+                  subtitle: Text(sleepStart == null
+                      ? 'Tap to pick'
+                      : sleepStart!.format(context)),
+                  onTap: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: const TimeOfDay(hour: 22, minute: 0),
+                    );
+                    if (picked != null) setDialogState(() => sleepStart = picked);
+                  },
+                ),
+                ListTile(
+                  title: const Text('Wake time'),
+                  subtitle: Text(sleepEnd == null
+                      ? 'Tap to pick'
+                      : sleepEnd!.format(context)),
+                  onTap: () async {
+                    final picked = await showTimePicker(
+                      context: context,
+                      initialTime: const TimeOfDay(hour: 7, minute: 0),
+                    );
+                    if (picked != null) setDialogState(() => sleepEnd = picked);
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(dialogContext),
+                child: const Text('Cancel'),
+              ),
+              ElevatedButton(
+                // null onPressed greys the button out until everything is filled in
+                onPressed: ready
+                    ? () => Navigator.pop(
+                          dialogContext,
+                          AccountInfo(
+                            name: name!,
+                            birthday: birthday!,
+                            sleepStart: sleepStart!,
+                            sleepEnd: sleepEnd!,
+                          ),
+                        )
+                    : null,
+                child: const Text('Finish'),
+              ),
+            ],
+          );
+        },
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {

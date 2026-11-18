@@ -43,9 +43,10 @@ class _SignupScreenState extends State<SignupScreen> {
     if (error != null) {
       setState(() => _errorMessage = null);
     } else {
-        Navigator.push(
+        Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreen()),
+        (route) => false,
         );
     }
   }
@@ -193,12 +194,14 @@ Future<AccountInfo?> _showAccountInfoDialog() {
 
             TextButton(
               onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const LoginScreen(),
-                  ),
-                );
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context);
+                } else {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  );
+                }
               },
               child: const Text(
                 'Already have an account? Log In',

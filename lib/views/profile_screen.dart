@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../presenters/auth_presenter.dart';
-import 'login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   final AuthPresenter _presenter = AuthPresenter();
@@ -8,21 +7,15 @@ class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
 
   void _logout(BuildContext context) async {
+    final navigator = Navigator.of(context);
     await _presenter.logout();
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (_) => const LoginScreen(),
-      ),
-      (route) => false,
-    );
+    navigator.popUntil((route) => route.isFirst);
   }
+
 
   @override
   Widget build(BuildContext context) {
-    final email =
-        _presenter.getCurrentUserEmail() ?? 'Unknown User';
+    final email = _presenter.getCurrentUserEmail() ?? 'Unknown User';
 
     return Scaffold(
       appBar: AppBar(
@@ -36,29 +29,21 @@ class ProfileScreen extends StatelessWidget {
           children: [
             const CircleAvatar(
               radius: 50,
-              backgroundColor: Colors.purple,
-              child: Icon(
-                Icons.person,
-                size: 50,
-                color: Colors.white,
-              ),
+              backgroundColor: Colors.blue,
+              child: Icon(Icons.person, size: 50, color: Colors.white),
             ),
-
-            const SizedBox(height: 24),
-
             Card(
               elevation: 4,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: ListTile(
+              child:ListTile(
                 leading: const Icon(Icons.email),
-                title: Text(email),
+                title: const Text('Email'),
+                subtitle: Text(email),
               ),
             ),
-
             const SizedBox(height: 40),
-
             ElevatedButton.icon(
               onPressed: () => _logout(context),
               icon: const Icon(Icons.logout),
@@ -66,7 +51,6 @@ class ProfileScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
                 backgroundColor: Colors.redAccent,
-                foregroundColor: Colors.white,
               ),
             ),
           ],

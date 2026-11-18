@@ -32,69 +32,187 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  void _handleForgotPassword() async {
+    final email = _emailController.text.trim();
+
+    if (email.isEmpty) {
+      setState(() {
+        _errorMessage = 'Please enter your email first.';
+      });
+      return;
+    }
+
+    final error = await _presenter.resetPassword(email);
+
+    if (!mounted) return;
+
+    if (error != null) {
+      setState(() {
+        _errorMessage = error;
+      });
+    } else {
+      setState(() {
+        _errorMessage = null;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Password reset email sent.'),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF151326),
+
       appBar: AppBar(
         title: const Text('Login'),
-        automaticallyImplyLeading: false,
+        backgroundColor: const Color(0xFF151326),
+        foregroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            if (_errorMessage != null)
-              Text(
-                _errorMessage!,
-                style: const TextStyle(
-                  color: Colors.red,
-                ),
-              ),
 
-            TextField(
-              controller: _emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
+      body: SafeArea(
+        child: Stack(
+          children:[
+            const Positioned(
+              top: 10,
+              left: 0,
+              right: 200,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 221, 0),
+                size: 40
               ),
             ),
 
-            TextField(
-              controller: _passwordController,
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Password',
+            const Positioned(
+              top: 350,
+              left: 300,
+              right: 0,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 221, 0),
+                size: 40
               ),
             ),
 
-            const SizedBox(height: 20),
-
-            ElevatedButton(
-              onPressed: _handleLogin,
-              child: const Text('Login'),
+            const Positioned(
+              bottom: 10,
+              left: 0,
+              right: 250,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 221, 0),
+                size: 40
+              ),
             ),
 
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const SignupScreen(),
+            const Positioned(
+              top: 90,
+              left: 100,
+              right: 0,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 255, 255),
+                size: 20
+              ),
+            ),
+
+            const Positioned(
+              bottom: 1,
+              left: 100,
+              right: 0,
+              child: Icon(
+                Icons.star, color: Color.fromARGB(255, 255, 255, 255),
+                size: 20
+              ),
+            ),
+
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              children: [
+                if (_errorMessage != null)
+                  Text(
+                    _errorMessage!,
+                    style: const TextStyle(
+                      color: Colors.red,
+                    ),
                   ),
-                );
-              },
-              child: const Text(
-                "Don't have an account? Sign up",
-              ),
+
+                const SizedBox(height: 20),
+
+                const Icon(
+                  Icons.nightlight_round,
+                  color: Color(0xFFB39DDB),
+                  size: 120,
+                ),
+
+                const SizedBox(height: 50),
+
+                TextField(
+                  controller: _emailController,
+                  style: const TextStyle(color: Colors.white),
+                  decoration: const InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFB39DDB),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+
+
+                const SizedBox(height: 16),
+
+                TextField(
+                  controller: _passwordController,
+                  style: const TextStyle(color: Colors.white),
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Color(0xFFB39DDB),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 30),
+
+                ElevatedButton(
+                  onPressed: _handleLogin,
+                  child: const Text('Login'),
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const SignupScreen(),
+                      ),
+                    );
+                  },
+                  child: const Text(
+                    "Don't have an account? Sign up",
+                  ),
+                ),
+                TextButton(
+                  onPressed: _handleForgotPassword,
+                  child: const Text('Forgot Password?'),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-            // reset password
-            },
-              child: const Text('Forgot Password?'),
-            ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ],
+      )
+    ),
+      );
+    }
   }
-}

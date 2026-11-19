@@ -13,13 +13,13 @@ class MainNavigationScreen extends StatefulWidget {
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
   int _selectedIndex = 0;
+  bool _isSleeping = false;
 
-  // widgets for the bottom tab. index matches the items in the below scaffold
-  final List<Widget> _screens = [
-    const HomeScreen(),
-    const CalendarScreen(),
-    DayOverviewScreen(),
-  ];
+  void _onSleepStatusChanged(bool isSleeping) {
+    setState(() {
+      _isSleeping = isSleeping;
+    });
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,6 +29,14 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // widgets for the bottom tab. index matches the items in the below scaffold
+    final List<Widget> _screens = [
+      HomeScreen(isSleeping: _isSleeping, onSleepStatusChanged: _onSleepStatusChanged,
+      ),
+      const CalendarScreen(),
+      DayOverviewScreen(),
+    ];
+
     return Scaffold(
       // Keep tab state alive so the calendar retains its selected day.
       body: IndexedStack(index: _selectedIndex, children: _screens),
@@ -36,6 +44,18 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
+
+        backgroundColor: _isSleeping
+          ? const Color(0xFF151326)
+          : Colors.white,
+
+        selectedItemColor: _isSleeping
+            ? Colors.white
+            : Colors.deepPurple,
+
+        unselectedItemColor: _isSleeping
+            ? Colors.white54
+            : Colors.grey,
 
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),

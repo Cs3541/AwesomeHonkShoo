@@ -33,7 +33,7 @@ class DayOfSleep {
     required this.start,
     required this.end,
     required this.tiedDate,
-    this.stars = 0,
+    this.stars = 3,
     this.screenTime = 0,
     this.notes = '',
   });

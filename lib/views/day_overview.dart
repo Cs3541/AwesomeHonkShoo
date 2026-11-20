@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_honk_shoo_app/models/day_overview_model.dart';
 import 'package:awesome_honk_shoo_app/presenters/day_overview_presenter.dart';
+import 'package:awesome_honk_shoo_app/views/star_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +43,10 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  void changeStarRating(int stars) {
+    _dayOfSleep!.stars = stars;
   }
 
   // Gather ye data!
@@ -303,16 +308,16 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                     ),
                     child: Center(
                       child: ConstrainedBox(
-                        constraints: const BoxConstraints(maxWidth: 200),
+                        constraints: const BoxConstraints(maxWidth: 256),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            SizedBox(width: 32, child: Icon(Icons.star)),
-                            SizedBox(width: 32, child: Icon(Icons.star)),
-                            SizedBox(width: 32, child: Icon(Icons.star)),
-                            SizedBox(width: 32, child: Icon(Icons.star_border)),
-                            SizedBox(width: 32, child: Icon(Icons.star_border)),
+                            StarRatingWidget(
+                              onRatingChanged: (newRating) {
+                                changeStarRating(newRating);
+                              },
+                            ),
                           ],
                         ),
                       ),

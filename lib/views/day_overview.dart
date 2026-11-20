@@ -295,6 +295,29 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                     //),
                     //),
                   ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 200),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(width: 32, child: Icon(Icons.star)),
+                            SizedBox(width: 32, child: Icon(Icons.star)),
+                            SizedBox(width: 32, child: Icon(Icons.star)),
+                            SizedBox(width: 32, child: Icon(Icons.star_border)),
+                            SizedBox(width: 32, child: Icon(Icons.star_border)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),

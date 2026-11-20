@@ -19,6 +19,8 @@ class DayOfSleep {
   DateTime end;
   // Seconds you were on your phone.
   int screenTime;
+  // Rating out of 5.
+  int stars;
   // The day that the sleep is "recorded" for.
   // For instance, if you went to bed at 10:00 pm on Saturday, this will show up when you open up Saturday.
   // If you go to bed at 2:30 am on Sunday, it will still count as Saturday's sleep. This is why this variable exists.
@@ -31,6 +33,7 @@ class DayOfSleep {
     required this.start,
     required this.end,
     required this.tiedDate,
+    this.stars = 0,
     this.screenTime = 0,
     this.notes = '',
   });

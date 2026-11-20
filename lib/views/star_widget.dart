@@ -33,7 +33,6 @@ class _StarRatingWidgetState extends State<StarRatingWidget> {
     });
 
     try {
-      // Call the external callback passed from the parent widget
       widget.onRatingChanged(selectedRating);
 
       setState(() {
@@ -61,7 +60,6 @@ class _StarRatingWidgetState extends State<StarRatingWidget> {
               color: Colors.amber,
               size: 32,
             ),
-            // Disable buttons while waiting for the backend response
             onPressed: _isLoading ? null : () => _handleStarTap(starIndex),
           );
         }),

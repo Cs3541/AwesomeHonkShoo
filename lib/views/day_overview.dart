@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:awesome_honk_shoo_app/models/day_overview_model.dart';
 import 'package:awesome_honk_shoo_app/presenters/day_overview_presenter.dart';
+import 'package:awesome_honk_shoo_app/views/star_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -42,6 +43,10 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
   void initState() {
     super.initState();
     _loadData();
+  }
+
+  void changeStarRating(int stars) {
+    _dayOfSleep!.stars = stars;
   }
 
   // Gather ye data!
@@ -133,24 +138,6 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 0,
-                      horizontal: screenWidth * 0.15,
-                    ),
-                    child: SizedBox(
-                      height: 120,
-                      child: TextField(
-                        maxLines: null,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: "Notes...",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),
                   Text(
                     pieChartTouchedIndex != -1
                         ? '${pieChartData[pieChartTouchedIndex]['label']} for ${(pieChartData[pieChartTouchedIndex]['value'] / 60.0).toStringAsFixed(2)} hours'
@@ -294,6 +281,47 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                     //' hours',
                     //),
                     //),
+                  ),
+
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: Center(
+                      child: ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 256),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            StarRatingWidget(
+                              onRatingChanged: (newRating) {
+                                changeStarRating(newRating);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: SizedBox(
+                      height: 120,
+                      child: TextField(
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: "Notes...",
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

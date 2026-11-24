@@ -1,6 +1,7 @@
 import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_honk_shoo_app/views/caffeine_log_screen.dart';
+import '../presenters/sleep_log_presenter.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isSleeping;
@@ -15,11 +16,39 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final SleepLogPresenter _sleepPresenter =
+      SleepLogPresenter();
 
-  void _toggleSleepStatus() {
-    widget.onSleepStatusChanged(
-    !widget.isSleeping,
-    );
+  Future<void> _toggleSleepStatus() async {
+    if (!widget.isSleeping) {
+      // User is starting a sleep session
+      _sleepPresenter.startSleep();
+
+      widget.onSleepStatusChanged(true);
+    } else {
+      // User is ending the sleep session
+      try {
+        await _sleepPresenter.endSleep();
+
+        if (!mounted) return;
+
+        widget.onSleepStatusChanged(false);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Sleep session saved'),
+          ),
+        );
+      } catch (e) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not save sleep session: $e'),
+          ),
+        );
+      }
+    }
   }
 
   @override

@@ -19,8 +19,22 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
-        automaticallyImplyLeading: false,
+        backgroundColor: Colors.blue,
+        automaticallyImplyLeading: true,
+        title: Row(
+            children: [
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  'Profile',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ]
+        )
       ),
       body: Padding(
         padding: const EdgeInsets.all(24.0),

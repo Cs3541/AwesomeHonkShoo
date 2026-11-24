@@ -2,6 +2,7 @@ import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_honk_shoo_app/views/caffeine_log_screen.dart';
 import '../presenters/sleep_log_presenter.dart';
+import '../presenters/nap_log_prensenter.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isSleeping;
@@ -18,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final SleepLogPresenter _sleepPresenter =
       SleepLogPresenter();
+  final NapLogPresenter _napPresenter =
+    NapLogPresenter();
 
   Future<void> _toggleSleepStatus() async {
     if (!widget.isSleeping) {
@@ -122,6 +125,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
 
             const SizedBox(height: 20),
+
+            ElevatedButton.icon(
+              onPressed: () {
+                _napPresenter.startNap();
+                widget.onSleepStatusChanged(true);
+              },
+              icon: const Icon(Icons.bedtime),
+              label: const Text('Start Nap'),
+            ),
 
             if (!widget.isSleeping)
             ElevatedButton.icon(

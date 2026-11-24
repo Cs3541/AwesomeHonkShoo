@@ -42,4 +42,17 @@
             <data android:mimeType="text/plain"/>
         </intent>
     </queries>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <receiver
+        android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationsReceiver"
+        android:exported="false" />
+
+    <receiver
+        android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
+        android:exported="false">
+        <intent-filter>
+            <action android:name="android.intent.action.BOOT_COMPLETED" />
+            <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+        </intent-filter>
+    </receiver>
 </manifest>

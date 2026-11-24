@@ -138,24 +138,6 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(
-                      vertical: 0,
-                      horizontal: screenWidth * 0.15,
-                    ),
-                    child: SizedBox(
-                      height: 120,
-                      child: TextField(
-                        maxLines: null,
-                        expands: true,
-                        keyboardType: TextInputType.multiline,
-                        decoration: InputDecoration(
-                          hintText: "Notes...",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                    ),
-                  ),
                   Text(
                     pieChartTouchedIndex != -1
                         ? '${pieChartData[pieChartTouchedIndex]['label']} for ${(pieChartData[pieChartTouchedIndex]['value'] / 60.0).toStringAsFixed(2)} hours'
@@ -319,6 +301,24 @@ class _DayOverviewScreenState extends State<DayOverviewScreen> {
                               },
                             ),
                           ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(
+                      vertical: 0,
+                      horizontal: screenWidth * 0.15,
+                    ),
+                    child: SizedBox(
+                      height: 120,
+                      child: TextField(
+                        maxLines: null,
+                        expands: true,
+                        keyboardType: TextInputType.multiline,
+                        decoration: InputDecoration(
+                          hintText: "Notes...",
+                          border: OutlineInputBorder(),
                         ),
                       ),
                     ),

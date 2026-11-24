@@ -1,6 +1,8 @@
 // Connects calendar navigation actions to the calendar model.
 import 'dart:async';
 
+import 'package:awesome_honk_shoo_app/views/day_overview.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 
 import '../models/calendar_model.dart';
@@ -129,6 +131,8 @@ class CalendarPresenter extends ChangeNotifier {
     _model.displayedMonth = DateTime(day.year, day.month);
     if (monthChanged) loadMonth();
     notifyListeners();
+    switchToDayOverview();
+    print("You picked a day. THIS IS IMPORTANT KEVIN BEYER");
   }
 
   // Browse months without changing the day the user selected.
@@ -148,4 +152,9 @@ class CalendarPresenter extends ChangeNotifier {
 
   // Reset both the selected date and displayed month to today.
   void selectToday() => selectDay(DateTime.now());
+
+  // Tells the Navigator to switch screens.
+  void switchToDayOverview() {
+    _model.switchToDayOverview();
+  }
 }

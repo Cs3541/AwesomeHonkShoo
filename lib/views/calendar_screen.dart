@@ -1,4 +1,5 @@
 // Imports presentation widgets and the calendar's navigation presenter.
+import 'package:awesome_honk_shoo_app/views/day_overview.dart';
 import 'package:flutter/material.dart';
 
 import '../presenters/calendar_presenter.dart';
@@ -129,6 +130,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
     showDialog<void>(
       context: context,
       builder: (context) => const CalendarLegendDialog(),
+    );
+  }
+
+  void switchToDayOverview(DateTime day) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DayOverviewScreen()),
     );
   }
 }

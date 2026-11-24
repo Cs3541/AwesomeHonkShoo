@@ -2,6 +2,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:awesome_honk_shoo_app/views/calendar_screen.dart';
+
 import 'sleep_log.dart';
 
 // Describes duration bands without attaching Flutter colors to the model.
@@ -18,6 +20,9 @@ class CalendarModel {
 
   late DateTime selectedDate;
   late DateTime displayedMonth;
+
+  // Referenced to change screen.
+  CalendarScreen? calendarScreen;
 
   // Hold draft search controls until journal and rating data are connected.
   String journalQuery = '';
@@ -83,5 +88,10 @@ class CalendarModel {
     if (hours < 7) return SleepDurationBand.sixToSeven;
     if (hours <= 9) return SleepDurationBand.sevenToNine;
     return SleepDurationBand.overNine;
+  }
+
+  // Tells the other guy to switch to Day Overview.
+  void switchToDayOverview(DateTime day) {
+    calendarScreen?.switchToDayOverview(day);
   }
 }

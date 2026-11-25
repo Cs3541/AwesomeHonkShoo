@@ -2,7 +2,7 @@ import 'package:awesome_honk_shoo_app/views/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_honk_shoo_app/views/caffeine_log_screen.dart';
 import '../presenters/sleep_log_presenter.dart';
-import '../presenters/nap_log_prensenter.dart';
+import '../presenters/nap_log_presenter.dart';
 
 class HomeScreen extends StatefulWidget {
   final bool isSleeping;
@@ -28,10 +28,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _toggleSleepStatus() async {
     if (!widget.isSleeping) {
-      // User is starting a sleep session
-      _sleepPresenter.startSleep();
+      try {
+        await _sleepPresenter.startSleep();
 
-      widget.onSleepStatusChanged(true);
+        if (!mounted) return;
+
+        widget.onSleepStatusChanged(true);
+      } catch (e) {
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Could not start sleep session: $e'),
+          ),
+        );
+      }
     } else {
       // User is ending the sleep session
       try {
@@ -86,6 +97,69 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       }
     }
+
+  Future<void> _addJournalNote() async {
+    final controller = TextEditingController();
+
+    final note = await showDialog<String>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          title: const Text('Sleep Journal'),
+          content: TextField(
+            controller: controller,
+            maxLines: 5,
+            autofocus: true,
+            decoration: const InputDecoration(
+              hintText: 'Dreams, thoughts, interruptions...',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext);
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(
+                  dialogContext,
+                  controller.text.trim(),
+                );
+              },
+              child: const Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+
+    controller.dispose();
+
+    if (note == null || note.isEmpty) return;
+
+    try {
+      await _sleepPresenter.saveJournalNote(note);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Journal note saved'),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Could not save journal note: $e'),
+        ),
+      );
+    }
+  }
 
 
   @override
@@ -151,35 +225,54 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             const SizedBox(height: 30),
 
-            ElevatedButton(
-              onPressed: _toggleSleepStatus,
-              child: Text(
-                widget.isSleeping ? 'Wake Up' : 'Go to Sleep',
+
+            if (!widget.isSleeping)...[
+              ElevatedButton(
+                onPressed: _toggleSleepStatus,
+                child: Text('Go to Sleep',),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            ElevatedButton(
-              onPressed: _toggleNapStatus,
-                child: Text(
-                  widget.isNapping ? 'End Nap' : 'Start Nap',
+              ElevatedButton(
+                onPressed: _toggleNapStatus,
+                  child: Text(
+                    widget.isNapping ? 'End Nap' : 'Start Nap',
+                ),
               ),
-            ),
 
-            if (!widget.isSleeping)
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const CaffeineLogScreen(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.local_cafe),
-              label: const Text('Create Log / Caffeine'),
-            ),
+              const SizedBox(height: 20),
+
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const CaffeineLogScreen(),
+                    ),
+                  );
+                },
+                icon: const Icon(Icons.local_cafe),
+                label: const Text('Create Log / Caffeine'),
+              ),
+          
+            ] else ...[
+
+              ElevatedButton(
+                onPressed: _toggleSleepStatus,
+                child: const Text('Wake Up'),
+              ),
+
+              const SizedBox(height: 20),
+
+              ElevatedButton.icon(
+                onPressed: _addJournalNote,
+                icon: const Icon(Icons.edit_note),
+                label: const Text('Add Journal Note'),
+              ),
+
+              
+            ],
           ],
         ),
       ),

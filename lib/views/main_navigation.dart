@@ -27,12 +27,20 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     });
   }
 
+  bool _isNapping = false;
+
+  void _onNapStatusChanged(bool isNapping) {
+    setState(() {
+      _isNapping = isNapping;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // widgets for the bottom tab. index matches the items in the below scaffold
     final List<Widget> _screens = [
       HomeScreen(isSleeping: _isSleeping, onSleepStatusChanged: _onSleepStatusChanged,
-      ),
+          isNapping: _isNapping, onNapStatusChanged: _onNapStatusChanged),
       const CalendarScreen(),
       DayOverviewScreen(),
     ];

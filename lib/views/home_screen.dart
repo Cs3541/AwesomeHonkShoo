@@ -7,9 +7,13 @@ import '../presenters/nap_log_prensenter.dart';
 class HomeScreen extends StatefulWidget {
   final bool isSleeping;
   final ValueChanged<bool> onSleepStatusChanged;
+  final bool isNapping;
+  final ValueChanged<bool> onNapStatusChanged;
   const HomeScreen({super.key,
     required this.isSleeping,
     required this.onSleepStatusChanged,
+    required this.isNapping,
+    required this.onNapStatusChanged,
   });
 
   @override
@@ -53,6 +57,36 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
   }
+    Future<void> _toggleNapStatus() async {
+      if (!widget.isNapping) {
+        _napPresenter.startNap();
+
+        widget.onNapStatusChanged(true);
+      } else {
+        try {
+          await _napPresenter.endNap();
+
+          if (!mounted) return;
+
+          widget.onNapStatusChanged(false);
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Nap session saved'),
+            ),
+          );
+        } catch (e) {
+          if (!mounted) return;
+
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Could not save nap session: $e'),
+            ),
+          );
+        }
+      }
+    }
+
 
   @override
   Widget build(BuildContext context) {
@@ -126,13 +160,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 20),
 
-            ElevatedButton.icon(
-              onPressed: () {
-                _napPresenter.startNap();
-                widget.onSleepStatusChanged(true);
-              },
-              icon: const Icon(Icons.bedtime),
-              label: const Text('Start Nap'),
+            ElevatedButton(
+              onPressed: _toggleNapStatus,
+                child: Text(
+                  widget.isNapping ? 'End Nap' : 'Start Nap',
+              ),
             ),
 
             if (!widget.isSleeping)

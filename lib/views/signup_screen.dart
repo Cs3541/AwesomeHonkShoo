@@ -41,13 +41,10 @@ class _SignupScreenState extends State<SignupScreen> {
     if (!mounted) return;
 
     if (error != null) {
-      setState(() => _errorMessage = null);
+      setState(() => _errorMessage = error);
     } else {
-        Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-        (route) => false,
-        );
+        final navigator = Navigator.of(context);
+        navigator.popUntil((route) => route.isFirst);
     }
   }
 
@@ -55,7 +52,7 @@ Future<AccountInfo?> _showAccountInfoDialog() {
   DateTime? birthday;
   TimeOfDay? sleepStart;
   TimeOfDay? sleepEnd;
-  String name = '';
+  final nameController = TextEditingController();
 
   return showDialog<AccountInfo>(
     context: context,
@@ -72,6 +69,11 @@ Future<AccountInfo?> _showAccountInfoDialog() {
             content: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
+                TextField(
+                  controller: nameController,
+                  decoration: const InputDecoration(labelText:"Name"),
+                  onChanged: (_) => setDialogState(() {}),
+                ),
                 ListTile(
                   title: const Text('Birthday'),
                   subtitle: Text(birthday == null
@@ -126,7 +128,7 @@ Future<AccountInfo?> _showAccountInfoDialog() {
                     ? () => Navigator.pop(
                           dialogContext,
                           AccountInfo(
-                            name: name!,
+                            name: nameController.text.trim(),
                             birthday: birthday!,
                             sleepStart: sleepStart!,
                             sleepEnd: sleepEnd!,

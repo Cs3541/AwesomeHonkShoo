@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import './account_info.dart';
 
@@ -6,6 +7,7 @@ import './account_info.dart';
 
 class AuthModel{
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   Future<String?> login(String email, String password) async {
     try {
       await _auth.signInWithEmailAndPassword(
@@ -20,12 +22,19 @@ class AuthModel{
 
   Future<String?> signUp(String email, String password, AccountInfo info) async {
     try {
-      await _auth.createUserWithEmailAndPassword(
+      UserCredential credential = await _auth.createUserWithEmailAndPassword(
         email: email,
         password: password,
-
-    // Need to implement ability to store data for the user.
       );
+      final uid = credential.user?.uid;
+      if (uid == null) return 'Failed to retrieve UID.';
+
+      await _firestore.collection('users').doc(uid).set({
+        'email': email,
+        ...info.toMap(),
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+      
       return null;
     } catch (e) {
       return e.toString();

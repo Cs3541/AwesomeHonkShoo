@@ -91,12 +91,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: widget.isSleeping ? const Color(0xFF151326) : Colors.white,
+      backgroundColor: widget.isSleeping||widget.isNapping ? const Color(0xFF151326) : Colors.white,
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(56.0),
         child: AppBar(
           backgroundColor:
-            widget.isSleeping
+            widget.isSleeping || widget.isNapping
                   ? const Color.fromARGB(255, 34, 32, 57) : Colors.blueAccent,
           automaticallyImplyLeading: false, // Removes default back button
           title: Row(

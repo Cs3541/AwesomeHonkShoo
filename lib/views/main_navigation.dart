@@ -53,15 +53,15 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
 
-        backgroundColor: _isSleeping
+        backgroundColor: _isSleeping || _isNapping
           ? const Color(0xFF151326)
           : Colors.white,
 
-        selectedItemColor: _isSleeping
+        selectedItemColor: _isSleeping || _isNapping
             ? Colors.white
             : Colors.deepPurple,
 
-        unselectedItemColor: _isSleeping
+        unselectedItemColor: _isSleeping || _isNapping
             ? Colors.white54
             : Colors.grey,
 

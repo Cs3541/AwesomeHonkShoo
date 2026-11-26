@@ -210,17 +210,17 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: widget.isSleeping ? Colors.white : Colors.black,
+                color: widget.isSleeping || widget.isNapping ? Colors.white : Colors.black,
               ),
             ),
             const SizedBox(height: 20),
 
             Text(
-              widget.isSleeping ? 'Sleeping' : 'Awake',
+              widget.isSleeping || widget.isNapping ? 'Sleeping' : 'Awake',
               style: TextStyle(
                 fontSize: 32,
                 fontWeight: FontWeight.bold,
-                color: widget.isSleeping ? const Color.fromARGB(255, 33, 40, 243) : Colors.orange,
+                color: widget.isSleeping || widget.isNapping ? const Color.fromARGB(255, 33, 40, 243) : Colors.orange,
               ),
             ),
             const SizedBox(height: 30),

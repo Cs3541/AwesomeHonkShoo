@@ -27,12 +27,20 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     });
   }
 
+  bool _isNapping = false;
+
+  void _onNapStatusChanged(bool isNapping) {
+    setState(() {
+      _isNapping = isNapping;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // widgets for the bottom tab. index matches the items in the below scaffold
     final List<Widget> _screens = [
       HomeScreen(isSleeping: _isSleeping, onSleepStatusChanged: _onSleepStatusChanged,
-      ),
+          isNapping: _isNapping, onNapStatusChanged: _onNapStatusChanged),
       const CalendarScreen(),
       DayOverviewScreen(),
     ];
@@ -45,15 +53,15 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
 
-        backgroundColor: _isSleeping
+        backgroundColor: _isSleeping || _isNapping
           ? const Color(0xFF151326)
           : Colors.white,
 
-        selectedItemColor: _isSleeping
+        selectedItemColor: _isSleeping || _isNapping
             ? Colors.white
             : Colors.deepPurple,
 
-        unselectedItemColor: _isSleeping
+        unselectedItemColor: _isSleeping || _isNapping
             ? Colors.white54
             : Colors.grey,
 

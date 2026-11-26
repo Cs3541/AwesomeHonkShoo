@@ -21,4 +21,7 @@ class AuthPresenter {
   Future<String?> resetPassword(String email) {
   return _model.resetPassword(email);
   }
+
+  Future<AccountInfo?> getAccountInfo() => _model.getAccountInfo();
+
 }

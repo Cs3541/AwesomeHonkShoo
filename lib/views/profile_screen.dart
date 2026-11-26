@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/account_info.dart';
 import '../presenters/auth_presenter.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -36,29 +37,26 @@ class ProfileScreen extends StatelessWidget {
             ]
         )
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const CircleAvatar(
-              radius: 50,
-              backgroundColor: Colors.blue,
-              child: Icon(Icons.person, size: 50, color: Colors.white),
-            ),
-            Card(
-              elevation: 4,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child:ListTile(
-                leading: const Icon(Icons.email),
-                title: const Text('Email'),
-                subtitle: Text(email),
-              ),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton.icon(
+      body: FutureBuilder<AccountInfo?>(
+        future: _presenter.getAccountInfo(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child:CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          final info = snapshot.data;
+          if (info == null) {
+            return const Center(child: Text('No account info found.'));
+        }
+        return ListView(padding: const EdgeInsets.all(16),
+        children: [
+          Text('Name: ${info.name}'),
+          Text('Birthday: ${info.birthday.month}/${info.birthday.day}/${info.birthday.year}'),
+          Text('Bedtime: ${info.sleepStart.format(context)}'),
+          Text('Wake time: ${info.sleepEnd.format(context)}'),
+          ElevatedButton.icon(
               onPressed: () => _logout(context),
               icon: const Icon(Icons.logout),
               label: const Text('Logout'),
@@ -67,9 +65,10 @@ class ProfileScreen extends StatelessWidget {
                 backgroundColor: Colors.redAccent,
               ),
             ),
-          ],
-        ),
-      ),
+        ],
+        );
+  }),
+      
     );
   }
 }

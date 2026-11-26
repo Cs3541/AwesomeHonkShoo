@@ -34,7 +34,7 @@ class AuthModel{
         ...info.toMap(),
         'createdAt': FieldValue.serverTimestamp(),
       });
-      
+
       return null;
     } catch (e) {
       return e.toString();
@@ -57,4 +57,15 @@ class AuthModel{
     return e.toString();
     }
   }
+
+  Future<AccountInfo?> getAccountInfo() async {
+  final uid = _auth.currentUser?.uid;
+  if (uid == null) return null;
+
+  final doc = await _firestore.collection('users').doc(uid).get();
+  if (!doc.exists || doc.data() == null) return null;
+
+  return AccountInfo.fromMap(doc.data()!);
+}
+
 }

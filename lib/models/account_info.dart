@@ -30,7 +30,7 @@ class AccountInfo {
 
     return AccountInfo(name: map['name'] as String? ?? '', birthday: birthdayTs?.toDate() ?? DateTime(2000), 
     sleepStart: TimeOfDay(hour: int.tryParse(startParts[0]) ?? 22, minute: int.tryParse(startParts[1]) ?? 0), 
-    sleepEnd: TimeOfDay(hour: int.tryParse(startParts[0]) ?? 7, minute: int.tryParse(startParts[1]) ?? 0));
+    sleepEnd: TimeOfDay(hour: int.tryParse(endParts[0]) ?? 7, minute: int.tryParse(endParts[1]) ?? 0));
   }
 }
 
